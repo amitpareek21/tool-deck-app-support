@@ -1,0 +1,43 @@
+---
+description: ToolDeck product context, stack, and architecture boundaries
+alwaysApply: true
+---
+
+# ToolDeck core
+
+ToolDeck is a **B2B AI Resolution Engine**: help businesses resolve support and operational issues with AI-backed workflows, not ad-hoc prompts.
+
+## Product roadmap (always align here)
+
+- The phased plan and task checkboxes live in **[`ROADMAP.md`](ROADMAP.md)** at the repository root — **single source of truth** for what to build next.
+- For multi-step work, **read `ROADMAP.md` early** (via `@ROADMAP.md` or opening the file) so sequencing matches Phase 1 → 5; do not invent scope that contradicts it.
+- When a roadmap bullet is shipped, **update the matching checkbox** in `ROADMAP.md` in the same change set when practical.
+
+## Stack
+
+- **Backend:** Laravel 13, PHP ^8.3+, PostgreSQL with **pgvector** (see `composer.json` if versions drift).
+- **Frontend:** Inertia.js + React (TSX) + Tailwind CSS.
+- **AI:** Official **Laravel AI** (`Laravel\AI`) — Anthropic (e.g. Claude 3.5 Sonnet) and Ollama as configured in the app.
+
+## Where logic lives
+
+- **`app/Services/AI`:** Resolution engine orchestration, retrieval, and domain services (keep this modular).
+- **`app/Agents`:** Class-based AI agents (e.g. support triage/resolution agents).
+- **`app/Tools`:** Laravel AI function-calling tools exposed to agents.
+- **`resources/js/Components/Widget`:** Embeddable customer-facing widget UI.
+
+## Non-negotiables
+
+- Use **`Laravel\AI`** (agents, tools, provider abstractions) for model calls and tool routing — do not hand-roll HTTP clients to Anthropic/Ollama for product AI paths.
+- Prefer **Eloquent** with **native vector / `similaritySearch`** (pgvector) for semantic retrieval over one-off raw SQL unless there is a documented exception.
+- Prefer **strict typing** in PHP and TypeScript everywhere new code is written.
+
+```php
+// BAD — bypassing the official AI stack for app features
+Http::withHeaders([...])->post('https://api.anthropic.com/...');
+
+// GOOD — Laravel AI agent/tool flow
+// e.g. agent + registered tools under app/Agents, app/Tools
+```
+
+When `composer.json` or framework versions differ from this section, follow the **repo** as source of truth and update this rule if needed.

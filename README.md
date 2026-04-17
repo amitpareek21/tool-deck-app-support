@@ -18,12 +18,12 @@ ToolDeck Support is part of **ToolDeck**, a **B2B AI resolution engine**: struct
 
 ### Status (from `ROADMAP.md`)
 
-- **Done:** Phase 1 — Initialize (Laravel + Inertia + React with TypeScript via Breeze).
+- **Done:** Phase 1 — Initialize (Laravel 13 + Inertia + React with TypeScript via Breeze).
 - **Next:** Phase 1 — DB setup (PostgreSQL + `pgvector`), then schema, ingestion, and pipeline bullets.
 
 ## Stack
 
-- **Backend:** Laravel 12, PHP ^8.2+ (see [`composer.json`](composer.json)); PostgreSQL with **pgvector** (target for Phase 1).
+- **Backend:** Laravel 13, PHP ^8.3+ (see [`composer.json`](composer.json)); PostgreSQL with **pgvector** (target for Phase 1).
 - **Frontend:** Inertia.js, React (TSX), Tailwind CSS.
 - **AI (upcoming per roadmap):** **Laravel AI** (`Laravel\AI`) for agents and tools—no ad-hoc HTTP clients to model providers on product paths.
 
@@ -36,7 +36,7 @@ ToolDeck Support is part of **ToolDeck**, a **B2B AI resolution engine**: struct
 
 ## Local development
 
-Requirements: PHP ^8.2, Composer, Node.js + npm, and (for upcoming work) PostgreSQL with `pgvector`.
+Requirements: PHP ^8.3, Composer, Node.js + npm, and (for upcoming work) PostgreSQL with `pgvector`.
 
 ```bash
 cp .env.example .env

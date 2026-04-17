@@ -1,0 +1,34 @@
+---
+description: Laravel/PHP conventions for ToolDeck AI backend
+globs: app/**/*.php
+alwaysApply: false
+---
+
+# Laravel + AI (PHP)
+
+## Layout
+
+- **`app/Agents`:** One primary concern per agent class; register tools explicitly; keep prompts and behavior testable.
+- **`app/Tools`:** Laravel AI tools (function calling) — small surface area, clear input/output types, no hidden I/O.
+- **`app/Services/AI`:** Resolution engine steps (retrieval, ranking, response assembly, guardrails). Prefer composing agents/tools from here rather than bloating controllers or models.
+
+## Data + vectors
+
+- Use **Eloquent** models with **pgvector** columns where the schema uses vectors.
+- Prefer **`similaritySearch`** (or the project’s established vector query API) for nearest-neighbor retrieval; avoid duplicating the same raw SQL in multiple services.
+
+```php
+// BAD — scattered raw vector SQL across controllers
+// DB::select('... <-> ? ...', [$embedding]);
+
+// GOOD — centralized model/repository method using Eloquent vector support
+// $matches = Article::query()->similaritySearch('embedding', $embedding)->limit(10)->get();
+```
+
+(Adjust model/table names to match the codebase.)
+
+## PHP style
+
+- **`declare(strict_types=1);`** on new PHP files where the project already does so.
+- Prefer **constructor injection**, **DTOs/value objects** for tool inputs/outputs when complexity grows.
+- Controllers stay thin: validate, authorize, delegate to services/agents.

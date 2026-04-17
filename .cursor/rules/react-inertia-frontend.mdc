@@ -1,0 +1,32 @@
+---
+description: Inertia + React (TSX) + Tailwind conventions for ToolDeck
+globs: resources/js/**/*.{tsx,ts}
+alwaysApply: false
+---
+
+# Inertia + React (TSX)
+
+## Defaults
+
+- **Functional components** only; hooks for state and side effects.
+- **Strict TypeScript:** explicit props types, avoid `any`; narrow `PageProps` / shared types from `resources/js/types` (or project equivalent) when passing data from Laravel.
+- **Tailwind:** match existing spacing, typography, and color tokens; prefer utility composition over one-off inline styles.
+
+## Inertia
+
+- Pages live under the project’s Inertia pages directory (e.g. `resources/js/Pages`); keep **data loading** on the server where possible; use partial reloads only when it matches existing patterns.
+- Prefer **`<Link>`** from `@inertiajs/react` for internal navigation instead of full page reloads.
+
+## Embeddable widget (`resources/js/Components/Widget`)
+
+- Treat the widget as a **bounded bundle**: minimal dependencies, stable **public props API**, and no assumptions about global app state unless explicitly provided.
+- Avoid pulling heavy app-only modules into the widget subtree; favor small presentational components and shared primitives already used elsewhere.
+
+```tsx
+// BAD — untyped props
+function Widget(props: any) { ... }
+
+// GOOD — explicit contract
+type WidgetProps = { tenantId: string; sessionToken: string; onClose: () => void };
+export function Widget({ tenantId, sessionToken, onClose }: WidgetProps) { ... }
+```
